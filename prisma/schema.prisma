@@ -12,3 +12,29 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Songs {
+  id       Int     @id @default(autoincrement())
+  name     String
+  file     Bytes
+  albumId  Int
+  authorId Int
+  album    Albums  @relation(fields: [albumId], references: [id])
+  author   Authors @relation(fields: [authorId], references: [id])
+}
+
+model Albums {
+  id         Int      @id @default(autoincrement())
+  name_album String
+  date       DateTime
+  author     Authors  @relation(fields: [authorId], references: [id])
+  songs      Songs[]
+  authorId   Int
+}
+
+model Authors {
+  id          Int      @id @default(autoincrement())
+  name_author String
+  Songs       Songs[]
+  Albums      Albums[]
+}
